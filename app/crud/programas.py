@@ -30,3 +30,4 @@ def get_programa_by_cod(db: Session, cod: int):
     except SQLAlchemyError as e:
         logger.error(f"Error al consultar programa: {e}")
         raise Exception("Error al consultar programa")
+    

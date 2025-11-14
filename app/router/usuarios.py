@@ -116,3 +116,13 @@ def update_password(
 #verificar si la contraseña cambio 
 #$argon2id$v=19$m=65536,t=3,p=4$UWqt1VrLubc2BiAEIKQ0Bg$FlOqiBHdfdRQjZ0rqnh8vFfzDAj+p+dzmWfXTign8oU
 #$argon2id$v=19$m=65536,t=3,p=4$8p5TKmVMCYGQEiJkDOG8tw$DYj0uIp4hs/KQ5KCPKwg7lHOTezjd5WBXDzWZujQTgM
+
+@router.get("/obtener-todos}", status_code=status.HTTP_200_OK, response_model=List[RetornoUsuario])
+def get_all(db: Session = Depends(get_db)):
+    try:
+        users = crud_users.get_all_user(db)
+        if users is None:
+            raise HTTPException(status_code=404, detail="Usuarios no encontrados")
+        return users
+    except SQLAlchemyError as e:
+        raise HTTPException(status_code=500, detail=str(e))

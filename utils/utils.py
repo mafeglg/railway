@@ -7,12 +7,11 @@ def save_uploaded_document(file):
     """
     Guarda archivos PDF, Excel o Word en el servidor y retorna la ruta del archivo.
     """
-    # Directorio base de almacenamiento
-    # `Settings` define el campo como `upload_docs`, no `UPLOAD_DOCS`.
-    # Usar el atributo correcto para evitar AttributeError.
+    
+    
     UPLOAD_DOCS = getattr(settings, "upload_docs", os.getenv("UPLOAD_DOCS", "static/docs"))
     os.makedirs(UPLOAD_DOCS, exist_ok=True)
-
+    
     # Tipos MIME válidos
     valid_content_types = [
         'application/pdf',
