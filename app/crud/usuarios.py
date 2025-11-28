@@ -179,4 +179,17 @@ def get_all_user(db: Session):
         logger.error(f"Error al bucar usuario por id: {e}")
         raise Exception("Error de base de datos al buscar el usuario")
     
-    
+def buscar_usuarios_por_correo(db: Session, correo: str):
+    try:
+        query = text(""" 
+                SELECT usuario.id_usuario, usuario.nombre_completo, usuario.num_documento, 
+                usuario.correo, usuario.id_rol, usuario.estado, rol.nombre_rol
+                FROM usuario
+                INNER JOIN rol ON usuario.id_rol = rol.id_rol
+                WHERE LOWER(usuario.correo) LIKE LOWER(:pattern)
+        """)
+        result = db.execute(query, {"pattern": f"%{correo}%"}).mappings().all()
+        return result
+    except SQLAlchemyError as e:
+        logger.error(f"Error al buscar usuarios por correo: {e}")
+        raise Exception("Error de base de datos al buscar usuarios por correo")

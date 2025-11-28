@@ -145,3 +145,20 @@ def get_all_s(
     except SQLAlchemyError as e:
         raise HTTPException(status_code=500, detail=str(e))
     
+
+@router.get("/buscar", status_code=status.HTTP_200_OK, response_model=List[RetornoUsuario])
+def buscar_usuario(
+    correo: str,
+    db: Session = Depends(get_db),
+    user_token: RetornoUsuario = Depends(get_current_user)
+):
+    try:
+        resultados = crud_users.buscar_usuarios_por_correo(db, correo)
+
+        # Retorna lista vacía si no encuentra
+        return resultados
+    
+    except SQLAlchemyError as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+    
